@@ -13,9 +13,23 @@ return new class extends Migration
     {
         Schema::create('assignments', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('lesson_id');
+            $table->unsignedBigInteger('instructor_id');
+            $table->string('title');
+            $table->text('description')->nullable();
+            $table->timestamp('due_date')->nullable();
             $table->timestamps();
+
+            $table->foreign('lesson_id')
+                ->references('id')->on('lessons')
+                ->onDelete('cascade');
+
+            $table->foreign('instructor_id')
+                ->references('id')->on('users')
+                ->onDelete('cascade');
         });
     }
+
 
     /**
      * Reverse the migrations.

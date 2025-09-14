@@ -13,9 +13,18 @@ return new class extends Migration
     {
         Schema::create('lessons', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('course_id');
+            $table->string('title');
+            $table->text('content')->nullable();
+            $table->string('resource_path')->nullable(); // PDF/Video/Docs
             $table->timestamps();
+
+            $table->foreign('course_id')
+                ->references('id')->on('courses')
+                ->onDelete('cascade');
         });
     }
+
 
     /**
      * Reverse the migrations.

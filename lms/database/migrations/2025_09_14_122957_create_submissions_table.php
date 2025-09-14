@@ -13,7 +13,22 @@ return new class extends Migration
     {
         Schema::create('submissions', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('assignment_id');
+            $table->unsignedBigInteger('student_id');
+            $table->text('content')->nullable(); // نص الحل
+            $table->string('file_path')->nullable(); // لو رفع ملف
+            $table->integer('grade')->nullable();
+            $table->text('feedback')->nullable();
+            $table->enum('status', ['submitted', 'graded'])->default('submitted');
             $table->timestamps();
+
+            $table->foreign('assignment_id')
+                ->references('id')->on('assignments')
+                ->onDelete('cascade');
+
+            $table->foreign('student_id')
+                ->references('id')->on('users')
+                ->onDelete('cascade');
         });
     }
 
