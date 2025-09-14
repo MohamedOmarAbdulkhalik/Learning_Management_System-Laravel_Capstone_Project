@@ -18,5 +18,9 @@ class Assignment extends Model
     {
         return $this->hasMany(Submission::class);
     }
+    public function instructor()
+    {
+        return $this->belongsTo(User::class, 'instructor_id');
+    }
 }
 
