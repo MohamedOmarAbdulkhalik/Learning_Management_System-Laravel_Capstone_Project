@@ -10,6 +10,8 @@
     @endcan
 </div>
 
+@include('partials.flash')
+
 <form method="GET" class="mb-4 flex gap-2">
     <input type="text" name="q" value="{{ request('q') }}" placeholder="Search title..." class="border border-gray-300 px-3 py-2 rounded w-64">
     <select name="instructor_id" class="border border-gray-300 px-3 py-2 rounded">
@@ -34,7 +36,9 @@
     @foreach($courses as $course)
         <tr class="border-b">
             <td class="px-4 py-2">
-                <a href="{{ route('courses.show', $course) }}" class="text-blue-600 hover:underline">{{ $course->title }}</a>
+        <a href="{{ route('courses.lessons.index', $course) }}" class="text-blue-600 hover:underline">
+            {{ $course->title }}
+        </a>
             </td>
             <td class="px-4 py-2">{{ $course->instructor?->name }}</td>
             <td class="px-4 py-2">{{ $course->students->count() }}</td>
