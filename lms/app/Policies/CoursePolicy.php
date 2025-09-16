@@ -32,4 +32,29 @@ class CoursePolicy
     {
         return $this->update($user, $course);
     }
+
+    /**
+     * Determine whether the user can enroll in the course.
+     */
+    public function enroll(User $user, Course $course): bool
+    {
+        return $user->role === 'student';
+    }
+
+    /**
+     * Determine whether the user can unenroll from the course.
+     */
+    public function unenroll(User $user, Course $course): bool
+    {
+        return $user->role === 'student';
+    }
+
+    /**
+     * Determine whether the user can manage lessons inside the course.
+     */
+    public function manageLessons(User $user, Course $course): bool
+    {
+        return $this->update($user, $course); 
+        // المدرّب مالك الكورس أو الأدمن
+    }
 }
