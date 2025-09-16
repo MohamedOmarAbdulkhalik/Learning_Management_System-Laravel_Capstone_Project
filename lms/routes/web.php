@@ -4,10 +4,12 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\LessonController;
+use App\Http\Controllers\EnrollmentController;
 
 Route::get('/', function () {
     return view('welcome');
 });
+// Route::get('/h', [EnrollmentController::class, 'myCourses']);
 
 Route::get('/dashboard', function () {
     return view('dashboard');
