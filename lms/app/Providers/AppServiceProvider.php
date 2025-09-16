@@ -17,6 +17,8 @@ class AppServiceProvider extends ServiceProvider
     protected $policies = [
         \App\Models\Course::class => \App\Policies\CoursePolicy::class,
         \App\Models\Lesson::class => \App\Policies\LessonPolicy::class,
+        \App\Models\Course::class => \App\Policies\CoursePolicy::class,
+
 
     ];
 
