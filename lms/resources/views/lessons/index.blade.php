@@ -66,17 +66,24 @@
                         -
                     @endif
                 </td>
-                <td class="p-2 text-right">
-                    {{-- أزرار الإدارة للمدرّس أو الأدمن --}}
-                    @can('manageLessons', $course)
-                        <a href="{{ route('courses.lessons.edit', [$course, $lesson]) }}" class="btn">Edit</a>
+                    <td class="p-2 text-right">
+                        @can('manageLessons', $course)
+                            <a href="{{ route('courses.lessons.edit', [$course, $lesson]) }}" class="btn">Edit</a>
 
-                        <form action="{{ route('courses.lessons.destroy', [$course, $lesson]) }}" method="POST" class="inline-block" onsubmit="return confirm('Delete this lesson?')">
-                            @csrf @method('DELETE')
-                            <button class="btn btn-danger">Delete</button>
-                        </form>
-                    @endcan
-                </td>
+                            <a href="{{ route('courses.lessons.assignments.create', [$course, $lesson]) }}" 
+                            class="btn btn-success ml-2">
+                            + Add Assignment
+                            </a>
+
+                            <form action="{{ route('courses.lessons.destroy', [$course, $lesson]) }}" 
+                                method="POST" class="inline-block" 
+                                onsubmit="return confirm('Delete this lesson?')">
+                                @csrf @method('DELETE')
+                                <button class="btn btn-danger">Delete</button>
+                            </form>
+                        @endcan
+                    </td>
+
             </tr>
         @empty
             <tr>

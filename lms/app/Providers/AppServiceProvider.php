@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Gate;
+use App\Models\Assignment;
+use App\Policies\AssignmentPolicy;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -14,14 +16,15 @@ class AppServiceProvider extends ServiceProvider
     {
         //
     }
-    protected $policies = [
-        \App\Models\Course::class => \App\Policies\CoursePolicy::class,
-        \App\Models\Lesson::class => \App\Policies\LessonPolicy::class,
-        \App\Models\Course::class => \App\Policies\CoursePolicy::class,
-        \App\Models\Assignment::class => \App\Policies\AssignmentPolicy::class,
-        \App\Models\Submission::class => \App\Policies\SubmissionPolicy::class,
+    // protected $policies = [
+    //     \App\Models\Course::class => \App\Policies\CoursePolicy::class,
+    //     \App\Models\Lesson::class => \App\Policies\LessonPolicy::class,
+    //     \App\Models\Course::class => \App\Policies\CoursePolicy::class,
+    //     \App\Models\Assignment::class => \App\Policies\AssignmentPolicy::class,
+    //     \App\Models\Submission::class => \App\Policies\SubmissionPolicy::class,
 
-    ];
+    // ];
+
 
     /**
      * Bootstrap any application services.
@@ -41,5 +44,8 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('isStudent', function ($user) {
             return $user->role === 'student';
         });
+
+        // Gate::policy(Assignment::class, AssignmentPolicy::class);
+
     }
 }

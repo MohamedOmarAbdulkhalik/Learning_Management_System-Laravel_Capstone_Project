@@ -6,6 +6,8 @@ use App\Models\Lesson;
 use App\Models\Assignment;
 use App\Http\Requests\AssignmentRequest;
 use Illuminate\Http\Request;
+use App\Policies\AssignmentPolicy;
+
 
 class AssignmentController extends Controller
 {
@@ -23,28 +25,45 @@ class AssignmentController extends Controller
         return view('assignments.index', compact('course','lesson','assignments'));
     }
 
-    public function create(Course $course, Lesson $lesson)
-    {
-        if ($lesson->course_id !== $course->id) abort(404);
+public function create(Course $course, Lesson $lesson)
+{
+    if ($lesson->course_id !== $course->id) abort(404);
 
-        $this->authorize('create', $lesson); // AssignmentPolicy::create(User, Lesson)
-        return view('assignments.create', compact('course','lesson'));
+    // أنشئ كائن Assignment مؤقت واربطه بالدرس
+    $assignment = new Assignment();
+    $assignment->lesson()->associate($lesson);
+
+    // تحقق من الصلاحية
+    $this->authorize('create', $assignment);
+
+    return view('assignments.create', compact('course','lesson'));
+}
+
+
+public function store(AssignmentRequest $request, Course $course, Lesson $lesson)
+{
+    if ($lesson->course_id !== $course->id) {
+        abort(404);
     }
 
-    public function store(AssignmentRequest $request, Course $course, Lesson $lesson)
-    {
-        if ($lesson->course_id !== $course->id) abort(404);
-
-        $this->authorize('create', $lesson);
-
-        $data = $request->validated();
-        $data['lesson_id'] = $lesson->id;
-
-        Assignment::create($data);
-
-        return redirect()->route('courses.lessons.assignments.index', [$course, $lesson])
-            ->with('success','Assignment created successfully.');
+    // استدعاء policy مباشرة وليس عبر $this->authorize
+    $assignmentPolicy = new AssignmentPolicy();
+    if (!$assignmentPolicy->create(auth()->user(), $lesson)) {
+        abort(403);
     }
+
+    $data = $request->validated();
+    $data['lesson_id'] = $lesson->id;
+    $data['instructor_id'] = auth()->id();
+
+    Assignment::create($data);
+
+    return redirect()->route('courses.lessons.assignments.index', [$course, $lesson])
+                     ->with('success','Assignment created successfully.');
+}
+
+
+
 
     public function show(Course $course, Lesson $lesson, Assignment $assignment)
     {
