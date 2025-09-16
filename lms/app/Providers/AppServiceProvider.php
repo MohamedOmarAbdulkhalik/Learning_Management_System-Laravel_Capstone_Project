@@ -18,7 +18,8 @@ class AppServiceProvider extends ServiceProvider
         \App\Models\Course::class => \App\Policies\CoursePolicy::class,
         \App\Models\Lesson::class => \App\Policies\LessonPolicy::class,
         \App\Models\Course::class => \App\Policies\CoursePolicy::class,
-
+        \App\Models\Assignment::class => \App\Policies\AssignmentPolicy::class,
+        \App\Models\Submission::class => \App\Policies\SubmissionPolicy::class,
 
     ];
 
