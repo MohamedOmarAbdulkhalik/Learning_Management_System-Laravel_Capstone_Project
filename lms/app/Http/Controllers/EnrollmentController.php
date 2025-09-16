@@ -19,7 +19,7 @@ class EnrollmentController extends Controller
     public function myCourses()
     {
         $courses = Auth::user()->courses()->with('instructor')->paginate(10);
-        return view('enrollments.my_courses', compact('courses'));
+        return view('enrollments.my-courses', compact('courses'));
     }
 
     // يطلب الطالب التسجيل في الكورس

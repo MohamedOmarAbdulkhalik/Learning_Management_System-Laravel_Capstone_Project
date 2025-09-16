@@ -41,6 +41,11 @@ class CoursePolicy
         return $user->role === 'student';
     }
 
+    public function manageEnrollments(User $user): bool
+    {
+        return $user->role === 'admin' ;
+        // المدرّب مالك الكورس أو الأدمن
+    }
     /**
      * Determine whether the user can unenroll from the course.
      */

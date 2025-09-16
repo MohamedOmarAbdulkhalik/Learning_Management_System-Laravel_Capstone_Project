@@ -42,9 +42,16 @@
             </td>
             <td class="px-4 py-2">{{ $course->instructor?->name }}</td>
             <td class="px-4 py-2">{{ $course->students->count() }}</td>
-            <td class="px-4 py-2 text-right">
+            <td class="px-4 py-2 text-right space-x-2">
+                {{-- زر إدارة المسجلين --}}
+                @can('manage-enrollments', $course)
+                    <a href="{{ route('courses.students.manage', $course) }}" class="bg-purple-500 text-white px-3 py-1 rounded hover:bg-purple-600 inline-block">
+                        Manage Students
+                    </a>
+                @endcan
+                
                 @can('update', $course)
-                <a href="{{ route('courses.edit', $course) }}" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 mr-2">Edit</a>
+                <a href="{{ route('courses.edit', $course) }}" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 inline-block">Edit</a>
                 @endcan
                 @can('delete', $course)
                 <form id="deleteForm{{ $course->id }}" action="{{ route('courses.destroy', $course) }}" method="POST" class="inline-block">
