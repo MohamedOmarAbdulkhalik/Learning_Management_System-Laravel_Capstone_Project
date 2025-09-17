@@ -51,4 +51,9 @@ class User extends Authenticatable
                     ->withTimestamps();
     }
 
+    public function submissions()
+    {
+        return $this->hasMany(Submission::class);
+    }
+
 }
