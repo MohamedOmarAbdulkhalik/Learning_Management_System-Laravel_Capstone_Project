@@ -48,6 +48,8 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('courses.lessons.assignments', AssignmentController::class);
 
     // Submission Controller
+    Route::get('/submissions', [SubmissionController::class, 'index'])->name('submissions.index');
+
     Route::get('courses/{course}/lessons/{lesson}/assignments/{assignment}/submissions/create', [SubmissionController::class, 'create'])
         ->name('assignments.submissions.create');
     Route::post('courses/{course}/lessons/{lesson}/assignments/{assignment}/submissions', [SubmissionController::class, 'store'])

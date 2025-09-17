@@ -53,20 +53,20 @@
     <tbody>
         @forelse($lessons as $lesson)
             <tr class="border-b">
-<td class="p-2">
-    @if(auth()->check() && (
-        $course->students->contains(auth()->id()) 
-        || auth()->user()->id === $course->instructor_id 
-        || auth()->user()->role === 'admin'
-    ))
-        <a href="{{ route('courses.lessons.show', [$course, $lesson]) }}" 
-           class="text-blue-600 hover:underline">
-            {{ $lesson->title }}
-        </a>
-    @else
-        <span class="text-gray-500">{{ $lesson->title }}</span>
-    @endif
-</td>
+                <td class="p-2">
+                    @if(auth()->check() && (
+                        $course->students->contains(auth()->id()) 
+                        || auth()->user()->id === $course->instructor_id 
+                        || auth()->user()->role === 'admin'
+                    ))
+                        <a href="{{ route('courses.lessons.show', [$course, $lesson]) }}" 
+                        class="text-blue-600 hover:underline">
+                            {{ $lesson->title }}
+                        </a>
+                    @else
+                        <span class="text-gray-500">{{ $lesson->title }}</span>
+                    @endif
+                </td>
 
                 <td class="p-2">{{ $lesson->assignments_count }}</td>
                 <td class="p-2">
