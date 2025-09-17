@@ -11,10 +11,10 @@ class AssignmentPolicy
     /**
      * Determine whether the user can create assignments.
      */
-public function create(User $user, Lesson $lesson): bool
+public function create(User $user, Assignment $assignment): bool
 {
     return $user->role === 'admin' || 
-           ($user->role === 'instructor' && $lesson->course->instructor_id == $user->id);
+           ($user->role === 'instructor' && $assignment->lesson->course->instructor_id == $user->id);
 }
 
 

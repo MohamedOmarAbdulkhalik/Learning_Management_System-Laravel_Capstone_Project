@@ -46,11 +46,12 @@ public function store(AssignmentRequest $request, Course $course, Lesson $lesson
         abort(404);
     }
 
-    // استدعاء policy مباشرة وليس عبر $this->authorize
-    $assignmentPolicy = new AssignmentPolicy();
-    if (!$assignmentPolicy->create(auth()->user(), $lesson)) {
-        abort(403);
-    }
+    // أنشئ كائن Assignment مؤقت للتحقق من الصلاحية
+    $assignment = new Assignment();
+    $assignment->lesson()->associate($lesson);
+
+    // استخدم authorize العادي بعد تعديل البوليسي
+    $this->authorize('create', $assignment);
 
     $data = $request->validated();
     $data['lesson_id'] = $lesson->id;
@@ -59,7 +60,7 @@ public function store(AssignmentRequest $request, Course $course, Lesson $lesson
     Assignment::create($data);
 
     return redirect()->route('courses.lessons.assignments.index', [$course, $lesson])
-                     ->with('success','Assignment created successfully.');
+                    ->with('success','Assignment created successfully.');
 }
 
 

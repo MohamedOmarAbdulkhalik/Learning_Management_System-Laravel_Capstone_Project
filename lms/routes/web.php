@@ -8,29 +8,42 @@ use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\SubmissionController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
-// Route::get('/h', [EnrollmentController::class, 'myCourses']);
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
 Route::middleware('auth')->group(function () {
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
 });
 
+Route::get('/', function () { return view('welcome'); });
 
-// 🛡️ نخليها محمية بالـ auth
+
 Route::middleware(['auth'])->group(function () {
-    
-    // 📚 مسارات الكورسات
+
+    // Dashboard View
+    Route::get('/dashboard', function () { return view('dashboard');})->name('dashboard');
+
+    // Course Controller
     Route::resource('courses', CourseController::class);
+
+    // Lesson Controller
     Route::resource('courses.lessons', LessonController::class);
 
+    // Enrollment Controller
+    Route::get('courses/{course}/students', [EnrollmentController::class, 'manage'])->name('courses.students.manage');
+    Route::post('courses/{course}/students', [EnrollmentController::class, 'addStudent'])->name('courses.students.add');
+    Route::delete('courses/{course}/students/{student}', [EnrollmentController::class, 'removeStudent'])->name('courses.students.remove');
+    Route::post('courses/{course}/enroll', [EnrollmentController::class, 'store'])->name('courses.enroll');
+    Route::delete('courses/{course}/unenroll', [EnrollmentController::class, 'destroy'])->name('courses.unenroll');
+
+    // Assignment Controller
+    Route::get('/courses/{course}/lessons/{lesson}/assignments/create', [AssignmentController::class, 'create'])
+        ->name('courses.lessons.assignments.create');
+        
+    Route::resource('courses.lessons.assignments', AssignmentController::class);
+    Route::post('/courses/{course}/lessons/{lesson}/assignments', [AssignmentController::class, 'store'])
+        ->name('courses.lessons.assignments.store');
     
 });
 
@@ -40,19 +53,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('my-courses', [EnrollmentController::class, 'myCourses'])->name('student.courses');
 
     // تسجيل/الغاء التسجيل بواسطة الطالب (self enroll)
-    Route::post('courses/{course}/enroll', [EnrollmentController::class, 'store'])->name('courses.enroll');
-    Route::delete('courses/{course}/unenroll', [EnrollmentController::class, 'destroy'])->name('courses.unenroll');
 
-    // إدارة التسجيلات (admin/instructor)
-    Route::get('courses/{course}/students', [EnrollmentController::class, 'manage'])->name('courses.students.manage');
-    Route::post('courses/{course}/students', [EnrollmentController::class, 'addStudent'])->name('courses.students.add');
-    Route::delete('courses/{course}/students/{student}', [EnrollmentController::class, 'removeStudent'])->name('courses.students.remove');
+
 });
 
 
 
 Route::middleware(['auth'])->group(function () {
-    Route::resource('courses.lessons.assignments', AssignmentController::class);
 
     // submit a solution (student)
     Route::post('/assignments/{assignment}/submissions', [SubmissionController::class, 'store'])
@@ -66,10 +73,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/submissions/{submission}', [SubmissionController::class, 'show'])->name('submissions.show');
 
 
-        Route::get('/courses/{course}/lessons/{lesson}/assignments/create', [AssignmentController::class, 'create'])
-        ->name('courses.lessons.assignments.create');
-    Route::post('/courses/{course}/lessons/{lesson}/assignments', [AssignmentController::class, 'store'])
-        ->name('courses.lessons.assignments.store');
+
+
 });
 
 

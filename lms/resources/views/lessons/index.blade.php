@@ -70,9 +70,9 @@
                         @can('manageLessons', $course)
                             <a href="{{ route('courses.lessons.edit', [$course, $lesson]) }}" class="btn">Edit</a>
 
-                            <a href="{{ route('courses.lessons.assignments.create', [$course, $lesson]) }}" 
+                            <a href="{{ route('courses.lessons.assignments.index', [$course, $lesson]) }}" 
                             class="btn btn-success ml-2">
-                            + Add Assignment
+                            Manage Assignment
                             </a>
 
                             <form action="{{ route('courses.lessons.destroy', [$course, $lesson]) }}" 

@@ -54,11 +54,12 @@ class CourseController extends Controller
         return redirect()->route('courses.index')->with('success','Course created successfully.');
     }
 
-    public function show(Course $course)
-    {
-        $course->load('lessons','instructor','students');
-        return view('courses.show', compact('course'));
-    }
+    // TBD
+    // public function show(Course $course)
+    // {
+    //     $course->load('lessons','instructor','students');
+    //     return view('courses.show', compact('course'));
+    // }
 
     public function edit(Course $course)
     {
