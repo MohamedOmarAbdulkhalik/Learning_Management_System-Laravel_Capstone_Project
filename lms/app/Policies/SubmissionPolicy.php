@@ -18,7 +18,7 @@ class SubmissionPolicy
     }
 
 
-    public function create(User $user, Assignment $assignment): bool
+    public function submit(User $user, Assignment $assignment): bool
     {
         // الطالب يجب أن يكون مسجلاً في الكورس المرتبط
         if ($user->role !== 'student') return false;

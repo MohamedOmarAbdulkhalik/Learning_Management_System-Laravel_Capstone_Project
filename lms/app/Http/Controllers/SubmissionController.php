@@ -7,71 +7,39 @@ use App\Models\Submission;
 use App\Http\Requests\SubmissionRequest;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
+use App\Models\Course;
+use App\Models\Lesson;
 
 class SubmissionController extends Controller
 {
-    public function __construct()
+    public function create(Course $course, Lesson $lesson, Assignment $assignment)
     {
-        $this->middleware('auth');
+        $this->authorize('submit', $assignment);
+        return view('submissions.create', compact('course','lesson','assignment'));
     }
 
-    // طالب يرفع حل
-    public function store(SubmissionRequest $request, Assignment $assignment)
-    {
-        $this->authorize('create', [\App\Models\Submission::class, $assignment]); // SubmissionPolicy::create(User, Assignment)
+public function store(Request $request, Course $course, Lesson $lesson, Assignment $assignment)
+{
+    $this->authorize('submit', $assignment);
 
-        $data = $request->validated();
-        $data['assignment_id'] = $assignment->id;
-        $data['student_id'] = auth()->id();
+    $data = $request->validate([
+        'content' => 'nullable|string',
+        'file' => 'nullable|file|max:2048',
+    ]);
 
-        if ($request->hasFile('file')) {
-            $path = $request->file('file')->store('submissions', 'public');
-            $data['file_path'] = $path;
-        }
-
-        // منع تكرار: لو الطالب سبق وقدم حلًا واحدًا لكل واجب (أو قم بالسماح بعدد)
-        $existing = Submission::where('assignment_id', $assignment->id)
-            ->where('student_id', auth()->id())
-            ->first();
-
-        if ($existing) {
-            // نحدّث الـ submission القديم
-            $existing->update(array_merge($data, ['status' => 'submitted', 'grade' => null, 'feedback' => null]));
-            $submission = $existing;
-        } else {
-            $submission = Submission::create($data);
-        }
-
-        // (اختياري) إرسال إشعار للمدرّس — يمكن إضافته لاحقًا.
-        return redirect()->back()->with('success','Submission uploaded successfully.');
+    $path = null;
+    if ($request->hasFile('file')) {
+        $path = $request->file('file')->store('submissions');
     }
 
-    // المدرّس يقوّم submission ويضع grade + feedback
-    public function grade(Request $request, Submission $submission)
-    {
-        // authorization
-        $this->authorize('grade', $submission);
+    Submission::create([
+        'assignment_id' => $assignment->id,
+        'student_id' => auth()->id(),
+        'content' => $data['content'] ?? null,
+        'file_path' => $path,
+    ]);
 
-        $data = $request->validate([
-            'grade' => 'required|integer|min:0|max:100',
-            'feedback' => 'nullable|string',
-        ]);
-
-        $submission->update([
-            'grade' => $data['grade'],
-            'feedback' => $data['feedback'] ?? null,
-            'status' => 'graded',
-        ]);
-
-        // (اختياري) إشعار للطالب
-
-        return redirect()->back()->with('success','Submission graded successfully.');
-    }
-
-    // عرض submission (student + instructor)
-    public function show(Submission $submission)
-    {
-        $this->authorize('view', $submission);
-        return view('submissions.show', compact('submission'));
-    }
+    return redirect()->route('courses.lessons.show', [$course, $lesson])
+                    ->with('success','Submission uploaded successfully.');
+}
 }

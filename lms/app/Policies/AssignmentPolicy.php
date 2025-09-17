@@ -28,4 +28,11 @@ public function create(User $user, Assignment $assignment): bool
     {
         return $this->update($user, $assignment);
     }
+
+      public function submit(User $user, Assignment $assignment): bool
+    {
+        // الطالب يجب أن يكون مسجلاً في الكورس المرتبط
+        if ($user->role !== 'student') return false;
+        return $user->courses()->where('courses.id', $assignment->lesson->course_id)->exists();
+    }
 }
