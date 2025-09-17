@@ -86,4 +86,28 @@ public function store(Request $request, Course $course, Lesson $lesson, Assignme
     return redirect()->route('courses.lessons.show', [$course, $lesson])
                     ->with('success','Submission uploaded successfully.');
 }
+public function show(Submission $submission)
+{
+    $this->authorize('view', $submission); // باستخدام Policy للتحقق من الصلاحيات
+
+    return view('submissions.show', compact('submission'));
+}
+
+public function grade(Request $request, Submission $submission)
+{
+    $this->authorize('grade', $submission); // المدرس أو المدير فقط
+
+    $request->validate([
+        'grade' => 'required|numeric|min:0|max:100',
+        'feedback' => 'nullable|string|max:2000',
+    ]);
+
+    $submission->update([
+        'grade' => $request->grade,
+        'feedback' => $request->feedback,
+        'status' => 'graded',
+    ]);
+
+    return redirect()->route('submissions.show', $submission)->with('success', 'Submission graded successfully.');
+}
 }

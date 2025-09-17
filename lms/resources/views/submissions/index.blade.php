@@ -41,6 +41,7 @@
             <th class="p-2">Status</th>
             <th class="p-2">Grade</th>
             <th class="p-2">Submitted At</th>
+            <th class="p-2">Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -53,6 +54,8 @@
                 <td class="p-2">{{ ucfirst($submission->status) }}</td>
                 <td class="p-2">{{ $submission->grade ?? '-' }}</td>
                 <td class="p-2">{{ $submission->created_at->format('Y-m-d') }}</td>
+                <td class="p-2">
+                <a href="{{ route('submissions.show', $submission) }}" class="bg-green-600 text-white px-3 py-1 rounded">View</a></td>
             </tr>
         @empty
             <tr>

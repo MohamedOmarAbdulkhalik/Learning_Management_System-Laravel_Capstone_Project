@@ -49,11 +49,15 @@ Route::middleware(['auth'])->group(function () {
 
     // Submission Controller
     Route::get('/submissions', [SubmissionController::class, 'index'])->name('submissions.index');
+    Route::get('/submissions/{submission}', [SubmissionController::class, 'show'])->name('submissions.show');
 
     Route::get('courses/{course}/lessons/{lesson}/assignments/{assignment}/submissions/create', [SubmissionController::class, 'create'])
         ->name('assignments.submissions.create');
     Route::post('courses/{course}/lessons/{lesson}/assignments/{assignment}/submissions', [SubmissionController::class, 'store'])
         ->name('assignments.submissions.store');
+
+    Route::post('/submissions/{submission}/grade', [SubmissionController::class, 'grade'])
+        ->name('submissions.grade');
 });
 
 
@@ -74,7 +78,6 @@ Route::middleware(['auth'])->group(function () {
         ->name('submissions.grade');
 
     // optional: show a submission
-    Route::get('/submissions/{submission}', [SubmissionController::class, 'show'])->name('submissions.show');
 });
 
 
