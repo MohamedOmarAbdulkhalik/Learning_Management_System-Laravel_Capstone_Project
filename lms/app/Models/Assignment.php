@@ -17,6 +17,9 @@ class Assignment extends Model
         'due_date',
     ];
 
+    protected $casts = [
+        'due_date' => 'datetime', // 👈 هذا يحوّل due_date إلى Carbon تلقائيًا
+    ];
     public function lesson()
     {
         return $this->belongsTo(Lesson::class);
