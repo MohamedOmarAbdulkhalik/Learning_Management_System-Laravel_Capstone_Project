@@ -53,7 +53,7 @@
     <tbody>
         @forelse($lessons as $lesson)
             <tr class="border-b">
-                <td class="p-2">
+<td class="p-2">
     @if(auth()->check() && (
         $course->students->contains(auth()->id()) 
         || auth()->user()->id === $course->instructor_id 
@@ -68,6 +68,8 @@
     @endif
 </td>
 
+                <td class="p-2">{{ $lesson->assignments_count }}</td>
+                <td class="p-2">
                     @if($lesson->resource_path)
                         <a href="{{ Storage::url($lesson->resource_path) }}" target="_blank" class="underline">Download</a>
                     @else
