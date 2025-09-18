@@ -1,21 +1,26 @@
-@if(session('success'))
-    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">
-        {{ session('success') }}
-    </div>
-@endif
+    <script>
+document.addEventListener('DOMContentLoaded', function(){
+    const success = @json(session('success'));
+    const error = @json(session('error'));
 
-@if(session('error'))
-    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
-        {{ session('error') }}
-    </div>
-@endif
+    function showToast(message, bg = '#16a34a') {
+        if(!message) return;
+        const el = document.createElement('div');
+        el.innerText = message;
+        el.style.position = 'fixed';
+        el.style.right = '20px';
+        el.style.top = '20px';
+        el.style.padding = '10px 14px';
+        el.style.background = bg;
+        el.style.color = 'white';
+        el.style.borderRadius = '6px';
+        el.style.boxShadow = '0 6px 18px rgba(0,0,0,0.12)';
+        el.style.zIndex = 9999;
+        document.body.appendChild(el);
+        setTimeout(()=> el.remove(), 4000);
+    }
 
-@if ($errors->any())
-    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
-        <ul class="list-disc ml-5">
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
+    if(success) showToast(success, '#16a34a'); // أخضر
+    if(error) showToast(error, '#dc2626');     // أحمر
+});
+</script>

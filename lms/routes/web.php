@@ -7,6 +7,8 @@ use App\Http\Controllers\LessonController;
 use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\SubmissionController;
+use App\Http\Controllers\NotificationController;
+
 
 Route::middleware('auth')->group(function () {
 
@@ -58,6 +60,12 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('/submissions/{submission}/grade', [SubmissionController::class, 'grade'])
         ->name('submissions.grade');
+
+    // Notification Controller
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::post('/notifications/{id}/read', [NotificationController::class, 'read'])->name('notifications.read');
+    Route::post('/notifications/read-all', [NotificationController::class, 'readAll'])->name('notifications.readAll');
+
 });
 
 
@@ -65,20 +73,7 @@ Route::middleware(['auth'])->group(function () {
 
 
 
-Route::middleware(['auth'])->group(function () {
 
-    Route::middleware('auth')->group(function () {});
-
-    // submit a solution (student)
-    // Route::post('/assignments/{assignment}/submissions', [SubmissionController::class, 'store'])
-    //     ->name('assignments.submissions.store');
-
-    // grade a submission (instructor)
-    Route::post('/submissions/{submission}/grade', [SubmissionController::class, 'grade'])
-        ->name('submissions.grade');
-
-    // optional: show a submission
-});
 
 
 require __DIR__ . '/auth.php';
