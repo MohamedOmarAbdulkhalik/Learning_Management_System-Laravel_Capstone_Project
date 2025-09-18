@@ -76,12 +76,22 @@ public function store(Request $request, Course $course, Lesson $lesson, Assignme
         $path = $request->file('file')->store('submissions');
     }
 
-    Submission::create([
+    $submission = Submission::create([
         'assignment_id' => $assignment->id,
         'student_id' => auth()->id(),
         'content' => $data['content'] ?? null,
         'file_path' => $path,
     ]);
+
+        // داخل store() بعد حفظ $submission
+    $assignment = $submission->assignment;
+    $course = $assignment->lesson->course;
+    $instructor = $course->instructor;
+
+    if ($instructor) {
+        $instructor->notify(new \App\Notifications\SubmissionSubmitted($submission));
+    }
+
 
     return redirect()->route('courses.lessons.show', [$course, $lesson])
                     ->with('success','Submission uploaded successfully.');
@@ -107,6 +117,7 @@ public function grade(Request $request, Submission $submission)
         'feedback' => $request->feedback,
         'status' => 'graded',
     ]);
+    $submission->student->notify(new \App\Notifications\SubmissionGraded($submission));
 
     return redirect()->route('submissions.show', $submission)->with('success', 'Submission graded successfully.');
 }
