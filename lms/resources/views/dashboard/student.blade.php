@@ -13,6 +13,7 @@
   </div>
 @endsection
 
-@push('scripts')
+{{-- احذف هذا الجزء --}}
+{{-- @push('scripts')
   @vite(['resources/js/app.js'])
-@endpush
+@endpush --}}
