@@ -1,18 +1,48 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
-        </h2>
-    </x-slot>
+@extends('layouts.app')
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-                    {{ __("You're logged in!") }}
-<p>instructor</p>
-                </div>
-            </div>
-        </div>
+@section('content')
+<h1 class="text-3xl font-bold mb-6">Instructor Dashboard</h1>
+
+<div class="bg-white shadow rounded p-4 mb-6">
+    <h2 class="text-lg font-semibold mb-4">My Courses</h2>
+    <ul class="list-disc list-inside">
+        @foreach($courses as $course)
+            <li>{{ $course->title }} ({{ $course->lessons->count() }} lessons)</li>
+        @endforeach
+    </ul>
+</div>
+
+<div class="bg-white shadow rounded p-4 mb-6">
+    <h2 class="text-lg font-semibold mb-4">Assignments Status</h2>
+    <div id="vue-app">
+        <assignments-status-chart 
+        :labels='@json($chartLabels)'
+        :submitted='@json($submittedCounts)'
+        :graded='@json($gradedCounts)'>
+        </assignments-status-chart>
     </div>
-</x-app-layout>
+
+</div>
+
+<div class="bg-white shadow rounded p-4">
+    <h2 class="text-lg font-semibold mb-4">Latest Student Activities</h2>
+    <table class="w-full text-left">
+        <thead>
+            <tr class="border-b">
+                <th class="p-2">Student</th>
+                <th class="p-2">Action</th>
+                <th class="p-2">At</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($activities as $activity)
+            <tr class="border-b">
+                <td class="p-2">{{ $activity->student->name }}</td>
+                <td class="p-2">{{ $activity->description }}</td>
+                <td class="p-2">{{ $activity->created_at->diffForHumans() }}</td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
+@endsection
