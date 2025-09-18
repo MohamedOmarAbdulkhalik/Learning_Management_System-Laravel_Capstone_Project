@@ -1,14 +1,21 @@
+import './bootstrap';  // إذا تستخدم bootstrap أو أي إعدادات أخرى
+
 import { createApp } from 'vue';
-import DeleteConfirm from './Components/DeleteConfirm.vue';
 
+// استيراد مكونات Vue التي ترغب باستخدامها في Blade
+import ExampleComponent from './components/ExampleComponent.vue';
+
+// إنشاء التطبيق Vue
 const app = createApp({});
-app.component('delete-confirm', DeleteConfirm);
-app.mount('#app');
 
-import './bootstrap';
+// تسجيل المكونات التي تستخدمها
+app.component('example-component', ExampleComponent);
 
-// import Alpine from 'alpinejs';
+// فقط مركب Vue داخل عنصر DOM معين #app أو عنصر محدد
+app.mount('#vue-app');  // أو id تختاره
 
-// window.Alpine = Alpine;
+import Alpine from 'alpinejs';
 
-// Alpine.start();
+window.Alpine = Alpine;
+
+Alpine.start();

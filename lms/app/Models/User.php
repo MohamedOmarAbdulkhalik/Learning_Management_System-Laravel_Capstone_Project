@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        
     ];
 
     /**
@@ -53,7 +54,12 @@ class User extends Authenticatable
 
     public function submissions()
     {
-        return $this->hasMany(Submission::class);
+        return $this->hasMany(Submission::class, 'student_id');
+    }
+
+    public function hasRole($role)
+    {
+        return $this->role === $role;
     }
 
 }
