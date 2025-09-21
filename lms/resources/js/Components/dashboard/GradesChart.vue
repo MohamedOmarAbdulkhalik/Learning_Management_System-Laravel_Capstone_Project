@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <canvas ref="canvas"></canvas>
+  <div class="w-full h-64 md:h-48">
+    <canvas ref="canvas" class="w-full h-full"></canvas>
   </div>
 </template>
 
@@ -9,14 +9,8 @@ import { Chart } from "chart.js/auto";
 
 export default {
   props: {
-    labels: {
-      type: Array,
-      default: () => []
-    },
-    data: {
-      type: Array,
-      default: () => []
-    }
+    labels: { type: Array, default: () => [] },
+    data: { type: Array, default: () => [] }
   },
   mounted() {
     if (this.labels.length > 0 && this.data.length > 0) {
@@ -44,20 +38,15 @@ export default {
         },
         options: {
           responsive: true,
+          maintainAspectRatio: false, // <== هذا يضمن أن canvas يأخذ حجم الحاوية
           scales: {
             y: {
               beginAtZero: true,
               max: 100,
-              title: {
-                display: true,
-                text: 'Grade'
-              }
+              title: { display: true, text: 'Grade' }
             },
             x: {
-              title: {
-                display: true,
-                text: 'Assignments'
-              }
+              title: { display: true, text: 'Assignments' }
             }
           }
         }
@@ -65,22 +54,8 @@ export default {
     }
   },
   watch: {
-    labels: {
-      handler() {
-        if (this.labels.length > 0 && this.data.length > 0) {
-          this.createChart();
-        }
-      },
-      deep: true
-    },
-    data: {
-      handler() {
-        if (this.labels.length > 0 && this.data.length > 0) {
-          this.createChart();
-        }
-      },
-      deep: true
-    }
+    labels: { handler() { if(this.labels.length && this.data.length) this.createChart(); }, deep: true },
+    data: { handler() { if(this.labels.length && this.data.length) this.createChart(); }, deep: true }
   }
 }
 </script>
