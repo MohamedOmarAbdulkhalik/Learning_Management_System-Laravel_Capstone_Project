@@ -29,7 +29,7 @@
 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4">
     <h2 class="text-xl font-semibold">Lessons</h2>
     <div class="flex flex-wrap gap-2">
-        <x-button-link href="{{ route('courses.index') }}">Back to Courses</x-button-link>
+        <x-button-link href="{{ route('courses.index') }}" variant="danger">Back to Courses</x-button-link>
 
         {{-- زر إنشاء درس يظهر فقط للمدرّب صاحب الكورس أو الأدمن --}}
         @can('manageLessons', $course)
@@ -60,7 +60,7 @@
                             || auth()->user()->id === $course->instructor_id 
                             || auth()->user()->role === 'admin'
                         ))
-                            <x-button-link href="{{ route('courses.lessons.show', [$course, $lesson]) }}">
+                            <x-button-link href="{{ route('courses.lessons.show', [$course, $lesson]) }}" variant="secondary">
                                 {{ $lesson->title }}
                             </x-button-link>
                         @else
@@ -79,10 +79,10 @@
                     </td>
                     <td class="px-4 py-2 text-right flex flex-wrap justify-end gap-2">
                         @can('manageLessons', $course)
-                            <x-button-link href="{{ route('courses.lessons.edit', [$course, $lesson]) }}" variant="primary">Edit</x-button-link>
-                            <x-button-link href="{{ route('courses.lessons.assignments.index', [$course, $lesson]) }}" variant="success">Manage Assignment</x-button-link>
+                            <x-button-link href="{{ route('courses.lessons.assignments.index', [$course, $lesson]) }}" variant="purple">Manage Assignment</x-button-link>
                             <form action="{{ route('courses.lessons.destroy', [$course, $lesson]) }}" method="POST" class="inline-block" onsubmit="return confirm('Delete this lesson?')">
                                 @csrf @method('DELETE')
+                                <x-button-link href="{{ route('courses.lessons.edit', [$course, $lesson]) }}" variant="green">Edit</x-button-link>
                                 <x-button variant="danger" type="submit">Delete</x-button>
                             </form>
                         @endcan
