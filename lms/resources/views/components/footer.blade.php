@@ -1,0 +1,5 @@
+<footer class="bg-white dark:bg-gray-800 shadow mt-8">
+    <div class="container mx-auto px-4 py-4 text-center text-gray-600 dark:text-gray-300">
+        &copy; {{ date('Y') }} LMS. All rights reserved.
+    </div>
+</footer>

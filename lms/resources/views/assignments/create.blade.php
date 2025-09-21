@@ -3,29 +3,50 @@
 @section('title', "Create Assignment for {$lesson->title}")
 
 @section('content')
-<div class="max-w-lg mx-auto bg-white p-6 rounded shadow">
-    <h1 class="text-xl font-bold mb-4">Create Assignment for: {{ $lesson->title }}</h1>
+<div class="max-w-lg mx-auto p-6 rounded-lg shadow bg-white dark:bg-gray-800">
+    <h1 class="text-2xl font-bold mb-6 text-gray-900 dark:text-gray-100">Create Assignment for: {{ $lesson->title }}</h1>
 
-    <form action="{{ route('courses.lessons.assignments.store', [$course, $lesson]) }}" method="POST">
+    <form action="{{ route('courses.lessons.assignments.store', [$course, $lesson]) }}" method="POST" class="space-y-5">
         @csrf
 
-        <div class="mb-3">
-            <label class="block font-medium">Title</label>
-            <input type="text" name="title" class="form-input w-full" required>
+        {{-- Title --}}
+        <div>
+            <label class="block font-medium mb-2 text-gray-700 dark:text-gray-200">Title</label>
+            <input 
+                type="text" 
+                name="title" 
+                placeholder="Enter assignment title"
+                class="w-full px-4 py-2 border rounded-lg bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition"
+                required
+            >
         </div>
 
-        <div class="mb-3">
-            <label class="block font-medium">Description</label>
-            <textarea name="description" class="form-input w-full"></textarea>
+        {{-- Description --}}
+        <div>
+            <label class="block font-medium mb-2 text-gray-700 dark:text-gray-200">Description</label>
+            <textarea 
+                name="description" 
+                placeholder="Enter assignment description"
+                rows="4"
+                class="w-full px-4 py-2 border rounded-lg bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition"
+            ></textarea>
         </div>
 
-        <div class="mb-3">
-            <label class="block font-medium">Due Date</label>
-            <input type="date" name="due_date" class="form-input w-full">
+        {{-- Due Date --}}
+        <div>
+            <label class="block font-medium mb-2 text-gray-700 dark:text-gray-200">Due Date</label>
+            <input 
+                type="date" 
+                name="due_date" 
+                class="w-full px-4 py-2 border rounded-lg bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition"
+            >
         </div>
 
-        <button type="submit" class="btn btn-success">Save Assignment</button>
-        <a href="{{ route('courses.lessons.show', [$course,$lesson]) }}" class="btn">Cancel</a>
+        {{-- Buttons --}}
+        <div class="flex flex-wrap gap-3 mt-4">
+            <x-button type="submit" variant="success">Save Assignment</x-button>
+            <x-button-link href="{{ route('courses.lessons.show', [$course,$lesson]) }}" variant="secondary">Cancel</x-button-link>
+        </div>
     </form>
 </div>
 @endsection
