@@ -1,4 +1,4 @@
-@props([
+{{-- @props([
     'name',
     'show' => false,
     'maxWidth' => '2xl'
@@ -75,4 +75,26 @@ $maxWidth = [
     >
         {{ $slot }}
     </div>
+</div> --}}
+@props([
+    'id',
+    'title' => null,
+    'show' => false,
+])
+
+<div x-data="{ open: @json($show) }" x-show="open" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50" style="display: none;">
+    <div @click.away="open = false" class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg w-11/12 md:w-1/2 p-6">
+        @if($title)
+            <h2 class="text-lg font-bold mb-4 text-gray-800 dark:text-gray-100">{{ $title }}</h2>
+        @endif
+
+        <div class="mb-4">
+            {{ $slot }}
+        </div>
+
+        <div class="text-right">
+            <x-button @click="open = false" variant="secondary">Close</x-button>
+        </div>
+    </div>
 </div>
+
