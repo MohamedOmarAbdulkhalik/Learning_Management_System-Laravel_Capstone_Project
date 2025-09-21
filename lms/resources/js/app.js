@@ -1,14 +1,25 @@
+import './bootstrap';  // إذا تستخدم bootstrap أو أي إعدادات أخرى
+
 import { createApp } from 'vue';
-import DeleteConfirm from './Components/DeleteConfirm.vue';
 
+// استيراد مكونات Vue التي ترغب باستخدامها في Blade
+import ExampleComponent from './components/ExampleComponent.vue';
+import AssignmentsStatusChart from './Components/dashboard/AssignmentsStatusChart.vue';
+import CourseDistributionChart from './Components/dashboard/CourseDistributionChart.vue';
+import GradesChart from './Components/dashboard/GradesChart.vue';
+// إنشاء التطبيق Vue
 const app = createApp({});
-app.component('delete-confirm', DeleteConfirm);
-app.mount('#app');
 
-import './bootstrap';
+// تسجيل المكونات التي تستخدمها
+app.component('example-component', ExampleComponent);
+app.component('assignments-status-chart', AssignmentsStatusChart);
+app.component('course-distribution-chart', CourseDistributionChart);
+app.component('grades-chart', GradesChart);
+// فقط مركب Vue داخل عنصر DOM معين #app أو عنصر محدد
+app.mount('#vue-app');  // أو id تختاره
 
-// import Alpine from 'alpinejs';
+import Alpine from 'alpinejs';
 
-// window.Alpine = Alpine;
+window.Alpine = Alpine;
 
-// Alpine.start();
+Alpine.start();

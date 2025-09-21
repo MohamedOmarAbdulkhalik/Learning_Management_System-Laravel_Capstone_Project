@@ -8,6 +8,7 @@ use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\SubmissionController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\DashboardController;
 
 
 Route::middleware('auth')->group(function () {
@@ -25,9 +26,7 @@ Route::get('/', function () {
 Route::middleware(['auth'])->group(function () {
 
     // Dashboard View
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard',[DashboardController::class,"index"])->name('dashboard');
 
     // Course Controller
     Route::resource('courses', CourseController::class);
