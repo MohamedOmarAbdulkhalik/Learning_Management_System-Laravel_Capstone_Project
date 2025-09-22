@@ -13,15 +13,32 @@
 @include('partials.flash')
 
 <form method="GET" class="mb-4 flex flex-col sm:flex-row gap-2">
-    <input type="text" name="q" value="{{ request('q') }}" placeholder="Search title..." class="border border-gray-300 dark:border-gray-600 px-3 py-2 rounded w-full sm:w-64">
-    <select name="instructor_id" class="border border-gray-300 dark:border-gray-600 px-3 py-2 rounded w-full sm:w-auto">
+    <input type="text" 
+        name="q" 
+        value="{{ request('q') }}" 
+        placeholder="Search title..." 
+        class="border border-gray-300 dark:border-gray-600 
+               bg-white dark:bg-gray-700 
+               text-gray-900 dark:text-gray-200 
+               placeholder-gray-400 dark:placeholder-gray-400 
+               px-3 py-2 rounded w-full sm:w-64 focus:outline-none focus:ring-2 focus:ring-blue-500">
+    
+    <select name="instructor_id" 
+        class="border border-gray-300 dark:border-gray-600 
+               bg-white dark:bg-gray-700 
+               text-gray-900 dark:text-gray-200 
+               px-3 py-2 rounded w-full sm:w-auto focus:outline-none focus:ring-2 focus:ring-blue-500">
         <option value="">All Instructors</option>
         @foreach($instructors as $ins)
-        <option value="{{ $ins->id }}" {{ request('instructor_id') == $ins->id ? 'selected' : '' }}>{{ $ins->name }}</option>
+        <option value="{{ $ins->id }}" {{ request('instructor_id') == $ins->id ? 'selected' : '' }}>
+            {{ $ins->name }}
+        </option>
         @endforeach
     </select>
+
     <x-button type="submit" variant="primary">Search</x-button>
 </form>
+
 
 <div class="overflow-x-auto bg-white dark:bg-gray-800 shadow rounded-lg">
     <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
