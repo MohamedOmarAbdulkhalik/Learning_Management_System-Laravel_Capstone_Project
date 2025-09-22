@@ -7,8 +7,7 @@ use App\Models\Lesson;
 use App\Models\Assignment;
 use App\Http\Requests\AssignmentRequest;
 use Illuminate\Http\Request;
-use App\Policies\AssignmentPolicy;
-
+use Illuminate\Support\Facades\Log; 
 
 class AssignmentController extends Controller
 {
@@ -17,12 +16,21 @@ class AssignmentController extends Controller
         $this->middleware('auth');
     }
 
-    // /courses/{course}/lessons/{lesson}/assignments
     public function index(Course $course, Lesson $lesson)
     {
         if ($lesson->course_id !== $course->id) abort(404);
 
         $assignments = $lesson->assignments()->orderBy('created_at', 'desc')->paginate(10);
+
+        // Log العملية
+        Log::channel('assignment')->info('Assignments listed', [
+            'user_id' => auth()->id(),
+            'course_id' => $course->id,
+            'lesson_id' => $lesson->id,
+            'count' => $assignments->total(),
+            'url' => request()->fullUrl(),
+        ]);
+
         return view('assignments.index', compact('course', 'lesson', 'assignments'));
     }
 
@@ -30,34 +38,32 @@ class AssignmentController extends Controller
     {
         if ($lesson->course_id !== $course->id) abort(404);
 
-        // أنشئ كائن Assignment مؤقت واربطه بالدرس
-        $assignment = new Assignment();
-        $assignment->lesson()->associate($lesson);
-
-        // تحقق من الصلاحية
-        $this->authorize('create', $assignment);
+        Log::channel('assignment')->info('Create assignment form opened', [
+            'user_id' => auth()->id(),
+            'course_id' => $course->id,
+            'lesson_id' => $lesson->id,
+        ]);
 
         return view('assignments.create', compact('course', 'lesson'));
     }
 
     public function store(AssignmentRequest $request, Course $course, Lesson $lesson)
     {
-        if ($lesson->course_id !== $course->id) {
-            abort(404);
-        }
-
-        // أنشئ كائن Assignment مؤقت للتحقق من الصلاحية
-        $assignment = new Assignment();
-        $assignment->lesson()->associate($lesson);
-
-        // استخدم authorize العادي بعد تعديل البوليسي
-        $this->authorize('create', $assignment);
+        if ($lesson->course_id !== $course->id) abort(404);
 
         $data = $request->validated();
         $data['lesson_id'] = $lesson->id;
         $data['instructor_id'] = auth()->id();
 
-        Assignment::create($data);
+        $assignment = Assignment::create($data);
+
+        Log::channel('assignment')->info('Assignment created', [
+            'user_id' => auth()->id(),
+            'course_id' => $course->id,
+            'lesson_id' => $lesson->id,
+            'assignment_id' => $assignment->id,
+            'title' => $assignment->title,
+        ]);
 
         return redirect()->route('courses.lessons.assignments.index', [$course, $lesson])
             ->with('success', 'Assignment created successfully.');
@@ -68,6 +74,14 @@ class AssignmentController extends Controller
         if ($assignment->lesson_id !== $lesson->id || $lesson->course_id !== $course->id) abort(404);
 
         $assignment->load('submissions.student');
+
+        Log::channel('assignment')->info('Assignment viewed', [
+            'user_id' => auth()->id(),
+            'course_id' => $course->id,
+            'lesson_id' => $lesson->id,
+            'assignment_id' => $assignment->id,
+        ]);
+
         return view('assignments.show', compact('course', 'lesson', 'assignment'));
     }
 
@@ -75,7 +89,13 @@ class AssignmentController extends Controller
     {
         if ($assignment->lesson_id !== $lesson->id || $lesson->course_id !== $course->id) abort(404);
 
-        $this->authorize('update', $assignment);
+        Log::channel('assignment')->info('Edit form opened', [
+            'user_id' => auth()->id(),
+            'course_id' => $course->id,
+            'lesson_id' => $lesson->id,
+            'assignment_id' => $assignment->id,
+        ]);
+
         return view('assignments.edit', compact('course', 'lesson', 'assignment'));
     }
 
@@ -83,9 +103,14 @@ class AssignmentController extends Controller
     {
         if ($assignment->lesson_id !== $lesson->id || $lesson->course_id !== $course->id) abort(404);
 
-        $this->authorize('update', $assignment);
-
         $assignment->update($request->validated());
+
+        Log::channel('assignment')->info('Assignment updated', [
+            'user_id' => auth()->id(),
+            'course_id' => $course->id,
+            'lesson_id' => $lesson->id,
+            'assignment_id' => $assignment->id,
+        ]);
 
         return redirect()->route('courses.lessons.assignments.index', [$course, $lesson])
             ->with('success', 'Assignment updated successfully.');
@@ -95,9 +120,14 @@ class AssignmentController extends Controller
     {
         if ($assignment->lesson_id !== $lesson->id || $lesson->course_id !== $course->id) abort(404);
 
-        $this->authorize('delete', $assignment);
-
         $assignment->delete();
+
+        Log::channel('assignment')->warning('Assignment deleted', [
+            'user_id' => auth()->id(),
+            'course_id' => $course->id,
+            'lesson_id' => $lesson->id,
+            'assignment_id' => $assignment->id,
+        ]);
 
         return redirect()->route('courses.lessons.assignments.index', [$course, $lesson])
             ->with('success', 'Assignment deleted.');
