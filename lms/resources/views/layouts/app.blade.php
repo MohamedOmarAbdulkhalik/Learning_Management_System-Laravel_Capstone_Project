@@ -27,26 +27,60 @@
 
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const themeToggle = document.getElementById('theme-toggle');
-    const html = document.documentElement;
+// document.addEventListener('DOMContentLoaded', function() {
+//     const themeToggle = document.getElementById('theme-toggle');
+//     const html = document.documentElement;
 
-    // وضع افتراضي حسب LocalStorage
-    if(localStorage.getItem('theme') === 'dark') {
-        html.classList.add('dark');
-    } else {
-        html.classList.remove('dark');
-    }
+//     // وضع افتراضي حسب LocalStorage
+//     if(localStorage.getItem('theme') === 'dark') {
+//         html.classList.add('dark');
+//     } else {
+//         html.classList.remove('dark');
+//     }
 
-    // عند الضغط على الزر
-    themeToggle.addEventListener('click', function() {
-        html.classList.toggle('dark');
+//     // عند الضغط على الزر
+//     themeToggle.addEventListener('click', function() {
+//         html.classList.toggle('dark');
 
-        if(html.classList.contains('dark')) {
-            localStorage.setItem('theme', 'dark');
-        } else {
-            localStorage.setItem('theme', 'light');
-        }
+//         if(html.classList.contains('dark')) {
+//             localStorage.setItem('theme', 'dark');
+//         } else {
+//             localStorage.setItem('theme', 'light');
+//         }
+//     });
+// });
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const btn = document.getElementById('notifications-btn');
+        const dropdown = document.getElementById('notifications-dropdown');
+
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            dropdown.classList.toggle('hidden');
+        });
+
+        document.addEventListener('click', function(e) {
+            if (!dropdown.contains(e.target) && e.target !== btn) {
+                dropdown.classList.add('hidden');
+            }
+        });
+
+        dropdown.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+    });
+
+
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const navbar = document.getElementById('navbar');
+
+    mobileMenuBtn?.addEventListener('click', () => {
+        navbar.classList.toggle('hidden');
     });
 });
+
 </script>

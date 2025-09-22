@@ -46,24 +46,6 @@
 {{-- Script --}}
 @push('scripts')
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const btn = document.getElementById('notifications-btn');
-        const dropdown = document.getElementById('notifications-dropdown');
 
-        btn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            dropdown.classList.toggle('hidden');
-        });
-
-        document.addEventListener('click', function(e) {
-            if (!dropdown.contains(e.target) && e.target !== btn) {
-                dropdown.classList.add('hidden');
-            }
-        });
-
-        dropdown.addEventListener('click', function(e) {
-            e.stopPropagation();
-        });
-    });
 </script>
 @endpush
