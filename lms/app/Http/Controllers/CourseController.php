@@ -28,6 +28,7 @@ class CourseController extends Controller
             ->appends($request->query());
 
         $instructors = \App\Models\User::where('role','instructor')->get();
+        // throw new \Exception("Test error logging");
 
         return view('courses.index', compact('courses','instructors','search','instructor'));
     }
