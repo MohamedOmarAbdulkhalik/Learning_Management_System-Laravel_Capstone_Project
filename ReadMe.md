@@ -9,12 +9,11 @@
 ## Branching Strategy
 
 - **main** → النسخة النهائية للتسليم  
-- **develop** → الفرع الرئيسي للتطوير  
 - **feature/<name>** → لكل ميزة فرع خاص  
 - **hotfix/<name>** → لإصلاح عاجل بعد التسليم  
 
 **Workflow:**  
-Branches → develop → feature/* → test → merge → main  
+Branches  → feature/* → test → merge → main  
 Commits → descriptive, صغيرة وواضحة  
 UI → Blade + Vue + Tailwind (responsive)  
 Seeders + Factories → بيانات تجريبية للاختبار  
@@ -70,7 +69,7 @@ Seeders + Factories → بيانات تجريبية للاختبار
 
 - **Blade + Tailwind + Vue 3**  
 - Responsive for desktop, tablet, mobile  
-- Vue components for modals, toast notifications  
+- Vue components for charts 
 - Dark/Light Mode toggle (saved in LocalStorage)  
 - Unified messages and smooth navigation for better UX
 
@@ -108,7 +107,7 @@ Seeders + Factories → بيانات تجريبية للاختبار
 
 ## GitHub Repository
 
-- **Repository Structure:** main, develop, feature/*, hotfix/*  
+- **Repository Structure:** main, feature/*, hotfix/*  
 - **Commit Messages:** small, clear, descriptive  
 - **README.md:** includes installation, screenshots, API documentation, Git workflow  
 
@@ -117,11 +116,26 @@ Seeders + Factories → بيانات تجريبية للاختبار
 ## Installation
 
 ```bash
+# Clone repository
 git clone <repository-url>
 cd lms-project
+
+# Install PHP dependencies
 composer install
+
+# Copy environment file and generate app key
 cp .env.example .env
 php artisan key:generate
+
+# Run migrations and seeders
 php artisan migrate --seed
+
+# Install Node dependencies (Vue 3 + Tailwind + Vite)
 npm install
+
+# Build assets and start dev server
 npm run dev
+
+# Optionally, serve the application
+php artisan serve
+
